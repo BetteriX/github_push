@@ -33,6 +33,7 @@ char* get_git_url() {
 void normal_git_push(char* username, char* token, char* git_url){
     system("git add -A"); 
 
+    printf("Your git repo: %s\n", git_url);
     printf("Add meg a szöveget: ");
 
     char szoveg[SIZE];
@@ -53,10 +54,12 @@ void normal_git_push(char* username, char* token, char* git_url){
 void first_git_create(char* username){
     system("git branch -m main");
 
-    printf("Írd be a github repod nevét (PL. test_git_repo): ");
+    printf("You don't have a git repo\n");
+    printf("Write the name of it (test_git_repo): ");
 
     char repo_name[SIZE];
     fgets(repo_name, SIZE, stdin);
+    repo_name[strlen(repo_name)-1] = '\0';
 
     system("git init");
     char remoteadd[200];
@@ -88,8 +91,8 @@ int main() {
     if(git_url == "Nincs_git_repo"){
         first_git_create(username);
     }
-
-    normal_git_push(username, token, get_git_url());
-
+    
+    normal_git_push(username, token, git_url);
+    
     return 0;
 }
