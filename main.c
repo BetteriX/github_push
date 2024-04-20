@@ -70,17 +70,8 @@ void first_git_create(char* username){
 
 
 int main() {
-    /*
-    for (int i = 1; i < argc; i++) {
-        strcat(szoveg, argv[i]);
-
-        if(i != argc-1){
-            strcat(szoveg, " ");
-        }
-    }
-    */
-    char *username = getenv("GITHUB_USERNAME");
-    char *token = getenv("GITHUB_TOKEN");
+    char* username = getenv("GITHUB_USERNAME");
+    char* token = getenv("GITHUB_TOKEN");
 
     if (username == NULL || token == NULL) {
         printf("A felhasználónév vagy a token nincs megadva\n");
