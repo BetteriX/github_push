@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_SIZE 1024
+#define MAX_SIZE 2048
 #define SIZE 100
 
-char* get_git_url() {
+char* get_git_remote_url() {
     FILE *fp;
     char buffer[MAX_SIZE];
     char *url = NULL;
@@ -69,20 +69,18 @@ void first_git_create(char* username){
 
 int main() {
     char* username = getenv("GITHUB_USERNAME");
-    char* token = getenv("GITHUB_TOKEN");
 
-    if (username == NULL || token == NULL) {
-        printf("A felhasználónév vagy a token nincs megadva\n");
+    if (username == NULL) {
+        printf("A felhasználónév nincs megadva\n");
         return 1;
     }
 
-    char* git_url = get_git_url();
+    char* git_url = get_git_remote_url();
     if(git_url == "Nincs_git_repo"){
         first_git_create(username);
     }
     
     normal_git_push(git_url);
-
 
 
     return 0;
