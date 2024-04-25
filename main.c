@@ -30,7 +30,7 @@ char* get_git_url() {
     return url;
 }
 
-void normal_git_push(char* username, char* token, char* git_url){
+void normal_git_push(char* git_url){
     system("git add -A"); 
 
     printf("Your git repo: %s\n", git_url);
@@ -44,7 +44,7 @@ void normal_git_push(char* username, char* token, char* git_url){
     system(gitcommit);
     
     char gitUrl[200];
-    sprintf(gitUrl, "https://%s:%s@%s", username, token, git_url);
+    sprintf(gitUrl, "https://%s", git_url);
 
     char gitCommand[200];
     sprintf(gitCommand, "git push -u %s main", gitUrl);
@@ -81,7 +81,7 @@ int main() {
         first_git_create(username);
     }
     
-    normal_git_push(username, token, git_url);
+    normal_git_push(git_url);
 
 
 
