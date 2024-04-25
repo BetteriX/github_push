@@ -16,9 +16,9 @@ char* get_git_url() {
     }
 
     while (fgets(buffer, MAX_SIZE, fp) != NULL) {
-        if (strstr(buffer, "url =") != NULL) {
+        if (strstr(buffer, "remote =") != NULL) {
             // Find the URL part and copy it into a new string
-            char *url_start = strstr(buffer, "url =") + strlen("url =https:///");
+            char *url_start = strstr(buffer, "remote =") + strlen("remote =https:///");
             url = strdup(url_start);
             // Remove trailing newline characters
             url[strcspn(url, "\r\n")] = '\0';
@@ -67,8 +67,6 @@ void first_git_create(char* username){
     system(remoteadd);
 }
 
-
-
 int main() {
     char* username = getenv("GITHUB_USERNAME");
     char* token = getenv("GITHUB_TOKEN");
@@ -84,6 +82,8 @@ int main() {
     }
     
     normal_git_push(username, token, git_url);
-    
+
+
+
     return 0;
 }
