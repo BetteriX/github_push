@@ -18,7 +18,7 @@ char* get_git_remote_url() {
     while (fgets(buffer, MAX_SIZE, fp) != NULL) {
         if (strstr(buffer, "remote =") != NULL) {
             // Find the URL part and copy it into a new string
-            char *url_start = strstr(buffer, "remote =") /*+ strlen("remote =h")*/;
+            char *url_start = strstr(buffer, "remote =") + strlen("remote =h");
             url = strdup(url_start);
             // Remove trailing newline characters
             url[strcspn(url, "\r\n")] = '\0';
