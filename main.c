@@ -43,11 +43,11 @@ void normal_git_push(char* git_url){
     sprintf(gitcommit, "git commit -m \"%s\"", szoveg);
     system(gitcommit);
     
-    char gitUrl[200];
-    sprintf(gitUrl, "%s", git_url);
+    //char gitUrl[200];
+    //sprintf(gitUrl, "%s", git_url);
 
     char gitCommand[200];
-    sprintf(gitCommand, "git push -u %s main", gitUrl);
+    sprintf(gitCommand, "git push -u %s main", git_url);
     system(gitCommand);
 }   
 
