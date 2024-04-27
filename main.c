@@ -30,33 +30,6 @@ char* get_git_remote_url() {
     return url;
 }
 
-int is_valid_git_repo(char* git_url) {
-    // Check if git_url is NULL or points to a non-empty string
-    if (git_url == NULL || git_url[0] == '\0') {
-        return 0;
-    }
-
-    // Create the command to check if the repository exists
-    char command[MAX_SIZE];
-    snprintf(command, MAX_SIZE, "git ls-remote %s", git_url);
-
-    // Execute the command
-    FILE *fp = popen(command, "r");
-    if (fp == NULL) {
-        return 0; // Failed to execute command
-    }
-
-    char result[MAX_SIZE];
-    while (fgets(result, sizeof(result), fp) != NULL) {
-        // If any output is received, the repository exists
-        pclose(fp);
-        return 1;
-    }
-
-    pclose(fp);
-    return 0; // No output received, repository doesn't exist or is inaccessible
-}
-
 void normal_git_push(char* git_url){
     system("git add -A"); 
 
@@ -103,7 +76,6 @@ int main() {
 
     if(git_url == "Nincs_git_repo"){
         first_git_create(username);
-        is_valid_git_repo(git_url);
     }
     
     normal_git_push(git_url);
