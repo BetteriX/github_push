@@ -34,7 +34,7 @@ void normal_git_push(char* git_url, char* token, char* username){
     system("git add -A"); 
 
     printf("Your git repo: %s\n", git_url);
-    printf("Add meg a szöveget: ");
+    printf("Add the text: ");
 
     char szoveg[SIZE];
     fgets(szoveg, SIZE, stdin);
@@ -43,8 +43,11 @@ void normal_git_push(char* git_url, char* token, char* username){
     sprintf(gitcommit, "git commit -m \"%s\"", szoveg);
     system(gitcommit);
 
+    char gitUrl[200];
+    sprintf(gitUrl, "https://%s:%s@%s", username, token, git_url);
+    
     char gitCommand[200];
-    sprintf(gitCommand, "git push https://%s:%s@%s main",username, token, git_url);
+    sprintf(gitCommand, "git push -u %s main", gitUrl);
     system(gitCommand);
 }   
 
@@ -56,6 +59,12 @@ void first_git_create(char* username){
 
     char repo_name[SIZE];
     fgets(repo_name, SIZE, stdin);
+    repo_name[strlen(repo_name)-1]= '\0';
+
+    system("git init");
+    char remoteadd[200];
+    sprintf(remoteadd, "git remote add origin https://github.com/%s/%s", username, repo_name);
+    system(remoteadd);
 }
 
 int main() {
@@ -63,7 +72,7 @@ int main() {
     char* token = getenv("GITHUB_TOKEN");
 
     if (username == NULL || token == NULL) {
-        printf("A felhasználónév nincs megadva\n");
+        printf("A felhasználónév vagy a token nincs megadva\n");
         return 1;
     }
 
