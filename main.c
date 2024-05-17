@@ -44,7 +44,7 @@ void normal_git_push(char* git_url, char* token){
     system(gitcommit);
 
     char gitCommand[200];
-    sprintf(gitCommand, "git push -u %s %s main", git_url, token);
+    sprintf(gitCommand, "git push -u %s:%s main", git_url, token);
     system(gitCommand);
 }   
 
