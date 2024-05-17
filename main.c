@@ -18,7 +18,7 @@ char* get_git_remote_url() {
     while (fgets(buffer, MAX_SIZE, fp) != NULL) {
         if (strstr(buffer, "url =") != NULL) {
             // Find the URL part and copy it into a new string
-            char *url_start = strstr(buffer, "url =") + strlen("url =h");
+            char *url_start = strstr(buffer, "url =") + strlen("url =https:///");
             url = strdup(url_start);
             // Remove trailing newline characters
             url[strcspn(url, "\r\n")] = '\0';
@@ -30,7 +30,7 @@ char* get_git_remote_url() {
     return url;
 }
 
-void normal_git_push(char* git_url, char* token){
+void normal_git_push(char* git_url, char* token, char* username){
     system("git add -A"); 
 
     printf("Your git repo: %s\n", git_url);
@@ -44,7 +44,7 @@ void normal_git_push(char* git_url, char* token){
     system(gitcommit);
 
     char gitCommand[200];
-    sprintf(gitCommand, "git push -u %s:%s main", git_url, token);
+    sprintf(gitCommand, "git push https://%s:%s@%s main",username, token, git_url);
     system(gitCommand);
 }   
 
@@ -73,7 +73,7 @@ int main() {
         first_git_create(username);
     }
     
-    normal_git_push(git_url, token);
+    normal_git_push(git_url, token, username);
 
 
     return 0;
