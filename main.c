@@ -16,9 +16,9 @@ char* get_git_remote_url() {
     }
 
     while (fgets(buffer, MAX_SIZE, fp) != NULL) {
-        if (strstr(buffer, "remote =") != NULL) {
+        if (strstr(buffer, "url =") != NULL) {
             // Find the URL part and copy it into a new string
-            char *url_start = strstr(buffer, "remote =") + strlen("remote =h");
+            char *url_start = strstr(buffer, "url =") + strlen("url =h");
             url = strdup(url_start);
             // Remove trailing newline characters
             url[strcspn(url, "\r\n")] = '\0';
@@ -30,7 +30,7 @@ char* get_git_remote_url() {
     return url;
 }
 
-void normal_git_push(char* git_url){
+void normal_git_push(char* git_url, char* token){
     system("git add -A"); 
 
     printf("Your git repo: %s\n", git_url);
@@ -44,7 +44,7 @@ void normal_git_push(char* git_url){
     system(gitcommit);
 
     char gitCommand[200];
-    sprintf(gitCommand, "git push -u %s main", git_url);
+    sprintf(gitCommand, "git push -u %s %s main", git_url, token);
     system(gitCommand);
 }   
 
@@ -56,18 +56,13 @@ void first_git_create(char* username){
 
     char repo_name[SIZE];
     fgets(repo_name, SIZE, stdin);
-    repo_name[strlen(repo_name)-1] = '\0';
-
-    system("git init");
-    char remoteadd[200];
-    sprintf(remoteadd, "git remote add origin https://github.com/%s/%s", username, repo_name);
-    system(remoteadd);
 }
 
 int main() {
     char* username = getenv("GITHUB_USERNAME");
+    char* token = getenv("GITHUB_TOKEN");
 
-    if (username == NULL) {
+    if (username == NULL || token == NULL) {
         printf("A felhasználónév nincs megadva\n");
         return 1;
     }
@@ -78,7 +73,7 @@ int main() {
         first_git_create(username);
     }
     
-    normal_git_push(git_url);
+    normal_git_push(git_url, token);
 
 
     return 0;
