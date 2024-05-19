@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
 
 #define MAX_SIZE 2048
 #define SIZE 100
@@ -68,10 +69,14 @@ void first_git_create(char* username){
 }
 
 int main() {
+    // Átkonvertálja a betűket és normálisan írja ki (Windows alatt)
+    SetConsoleOutputCP(CP_UTF8);
+
     char* username = getenv("GITHUB_USERNAME");
     char* token = getenv("GITHUB_TOKEN");
 
     if (username == NULL || token == NULL) {
+        printf("%s %s", username, token);
         printf("A felhasználónév vagy a token nincs megadva\n");
         return 1;
     }
