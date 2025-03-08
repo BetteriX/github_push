@@ -58,16 +58,19 @@ char *get_git_remote_url()
 }
 
 // Function to push to an existing Git repository
-// Function to push to an existing Git repository
 void normal_git_push(char *git_url, char *token, char *username)
 {
     system("git add -A");
 
     printf("Your git repo: %s\n", git_url);
-    printf("Add the commit message: ");
 
     char szoveg[SIZE];
-    fgets(szoveg, SIZE, stdin);
+    do
+    {
+        printf("Add the commit message: ");
+        fgets(szoveg, SIZE, stdin);
+
+    } while (has_spec_character(szoveg) != 0);
 
     char gitcommit[COMMAND_SIZE];
     snprintf(gitcommit, sizeof(gitcommit), "git commit -m \"%s\"", szoveg);
@@ -87,12 +90,16 @@ void normal_git_push(char *git_url, char *token, char *username)
 void first_git_create(char *username, char *token)
 {
     system("git branch -m main");
-
     printf("You don't have a git repo\n");
-    printf("Write the name of the repository: ");
 
     char repo_name[SIZE];
-    fgets(repo_name, SIZE, stdin);
+    // Searches for special characters
+    do
+    {
+        printf("Write the name of the repository: ");
+        fgets(repo_name, SIZE, stdin);
+    } while (has_spec_character(repo_name) != 0);
+
     repo_name[strlen(repo_name) - 1] = '\0'; // Remove trailing newline
 
     // Create the repository on GitHub via the API
@@ -104,4 +111,19 @@ void first_git_create(char *username, char *token)
     char remoteadd[200];
     sprintf(remoteadd, "git remote add origin https://github.com/%s/%s", username, repo_name);
     system(remoteadd);
+}
+
+// Searches for special characters
+int has_spec_character(char *str)
+{
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        if ((unsigned char)str[i] > 127)
+        {
+            printf("Error! Has a Special character!\n");
+            return 1;
+        }
+    }
+
+    return 0;
 }
