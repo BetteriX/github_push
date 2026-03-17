@@ -3,27 +3,31 @@
 #include <string.h>
 #include "func.h"
 
+#ifdef _WIN32
+#define DEVNULL "nul"
+#else
+#define DEVNULL "/dev/null"
+#endif
+
 #define MAX_SIZE 2048
 #define SIZE 100
 #define URL_SIZE 512
 #define COMMAND_SIZE 1024
 
 // Function to create a GitHub repository using the GitHub API
+
 void create_github_repo(char *repo_name, char *username, char *token)
 {
-    char command[SIZE * 5]; // Buffer for the curl command
-
-    // Construct the curl command for GitHub API to create a new repository
+    char command[1024];
+    // Use double-quote JSON, escape inner quotes
     sprintf(command,
-            "curl -u \"%s:%s\" "
-            "-X POST "
+            "curl -u \"%s:%s\" -X POST "
             "-H \"Accept: application/vnd.github.v3+json\" "
-            "https://api.github.com/user/repos "
-            "-d '{\"name\":\"%s\", \"private\":false}' "
-            " > /dev/null 2>&1",
-            username, token, repo_name);
+            "-d \"{\\\"name\\\":\\\"%s\\\",\\\"private\\\":false}\" "
+            "https://api.github.com/user/repos > %s 2>&1",
+            username, token, repo_name, DEVNULL);
 
-    // Execute the command to create the repository
+    printf("Creating repo with command:\n%s\n", command); // temporary for debugging
     system(command);
 }
 
@@ -82,7 +86,7 @@ void normal_git_push(char *git_url, char *token, char *username)
 
     // Create the git command with safety checks
     char gitCommand[COMMAND_SIZE];
-    snprintf(gitCommand, sizeof(gitCommand), "git push -u %s main", gitUrl);
+    snprintf(gitCommand, sizeof(gitCommand), "git push -u %s HEAD", gitUrl);
     system(gitCommand);
 }
 
